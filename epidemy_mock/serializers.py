@@ -1,9 +1,12 @@
 from rest_framework import serializers
-from .models import Event
+from .models import YupeConcerts, YupeNews
 
 
-class EventSerializer(serializers.HyperlinkedModelSerializer):
+class ConcertsSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = Event
-        # fields = ('url', 'username', 'email', 'groups')
+        model = YupeConcerts
 
+
+class NewsSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = YupeNews
