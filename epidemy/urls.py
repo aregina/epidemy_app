@@ -19,7 +19,8 @@ from rest_framework import routers
 from epidemy_mock import views
 
 router = routers.DefaultRouter()
-router.register(r'events', views.EventViewSet)
+router.register(r'concerts', views.ConcertsViewSet)
+router.register(r'news', views.NewsViewSet)
 
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
