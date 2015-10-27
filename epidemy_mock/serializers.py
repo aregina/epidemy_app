@@ -8,6 +8,7 @@ class ConcertsSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('date', 'title', 'place', 'short_text', 'full_text')
 
 
+
 class NewsSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = YupeNews
