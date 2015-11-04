@@ -36,6 +36,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'rest_framework',
     'epidemy_mock',
+    'push_notifications',
 )
 
 REST_FRAMEWORK = {
@@ -73,6 +74,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'epidemy.wsgi.application'
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
