@@ -19,9 +19,8 @@ from rest_framework import routers
 from epidemy_mock import views
 
 router = routers.DefaultRouter()
-router.register(r'concerts', views.ConcertsViewSet)
+router.register(r'concerts', views.ConcertsViewSet, base_name='concert')
 router.register(r'news', views.NewsViewSet)
-#router.register(r'fans', views.create_fan)
 
 
 # Wire up our API using automatic URL routing.
@@ -30,7 +29,7 @@ urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^', include(router.urls)),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-    url(r'^push/', views.current_datetime),
+    url(r'^push/', views.send_push),
     url(r'^fans/', views.create_fan)
 ]
 
