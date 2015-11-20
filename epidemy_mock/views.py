@@ -5,7 +5,6 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from push_notifications.models import APNSDevice
-from django.http import HttpResponse
 import requests
 
 from django.contrib.gis.geos import Point
@@ -38,27 +37,23 @@ class FanViewSet(viewsets.ModelViewSet):
     serializer_class = FanSerializer
 
 
-def current_datetime(request):
-    now = datetime.datetime.now()
-    html = "<html><body>It is now %s.</body></html>" % now
-    return HttpResponse(html)
+def city_coordinates(city_name):
+    request_str = 'https://geocode-maps.yandex.ru/1.x/?format=json&geocode={}&results=1'.format(city_name)
+    city_data = requests.get(request_str)
+    city_point = city_data.json()['response']['GeoObjectCollection']['featureMember'][0]['GeoObject']['Point']
+    longitude, latitude = city_point['pos'].split()
+    city_point = Point(float(longitude), float(latitude))
+    return city_point
 
 
 def send_push(request):
     one_day_ago = datetime.datetime.today() - datetime.timedelta(days=1)
     new_concerts = YupeConcerts.objects.using('epidemy_legacy').filter(creation_date__gte=one_day_ago)
     for concert in new_concerts:
-        request_str = 'https://geocode-maps.yandex.ru/1.x/?format=json&geocode={}&results=1'.format(concert.title)
-        city_data = requests.get(request_str)
-        city_point = city_data.json()['response']['GeoObjectCollection']['featureMember'][0]['GeoObject']['Point']
-        city_coordinates = city_point['pos'].split()
-        longitude = float(city_coordinates[0])
-        latitude = float(city_coordinates[1])
-        center_point = Point(longitude, latitude)
+        center_point = city_coordinates(concert.title)
         fans_for_notifications = Fan.objects.filter(fan_point__dwithin=(center_point, 1.4))
         for fan in fans_for_notifications:
             device = APNSDevice(registration_id=fan.device_token)
-            requests.packages.urllib3.disable_warnings()
             concert_date = concert.date.strftime('%d.%m.%Y')
             message_for_notification = 'Уже {} концерт группы "Эпидемия" в городе {}.'.format(concert_date,
                                                                                               concert.title)

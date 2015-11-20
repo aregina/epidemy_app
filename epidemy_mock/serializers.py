@@ -24,9 +24,8 @@ class FanSerializer(serializers.Serializer):
     fan_point = serializers.ListField()
 
     def validate(self, attrs):
-        print(attrs)
         if len(attrs['fan_point']) != 2:
-            raise serializers.ValidationError("fan_point expect 2")
+            raise serializers.ValidationError("fan_point expects 2 coordinates")
         return super(FanSerializer, self).validate(attrs)
 
     def create(self, validated_data):
@@ -37,4 +36,3 @@ class FanSerializer(serializers.Serializer):
 
     class Meta:
         model = Fan
-

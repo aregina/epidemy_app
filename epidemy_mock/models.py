@@ -1,6 +1,6 @@
 from django.db.models import *
 from django.contrib.gis.db.models import PointField
-from django.contrib.gis.db import models
+from django.contrib.gis.db.models import GeoManager
 from django.utils import timezone
 
 
@@ -62,4 +62,4 @@ class Fan(Model):
     fan_point = PointField()
     device_token = CharField(max_length=255, unique=True)
     device_os_type = CharField(max_length=1, choices=OS_TYPE)
-    objects = models.GeoManager()
+    objects = GeoManager()
