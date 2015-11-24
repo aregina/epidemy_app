@@ -36,6 +36,9 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'rest_framework',
     'epidemy_mock',
+    'push_notifications',
+    'django_crontab',
+    'django.contrib.gis',
 )
 
 REST_FRAMEWORK = {
@@ -73,6 +76,11 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'epidemy.wsgi.application'
+
+CRONJOBS = [
+    ('* * * * *', 'epidemy_mock.views.send_push', '> /Users/rarslanova/last_scheduled_job.log')
+]
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/

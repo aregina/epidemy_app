@@ -1,4 +1,6 @@
 from django.db.models import *
+from django.contrib.gis.db.models import PointField
+from django.contrib.gis.db.models import GeoManager
 from django.utils import timezone
 
 
@@ -50,3 +52,14 @@ class YupeNews(Model):
         managed = False
         db_table = 'yupe_news'
         unique_together = (('alias', 'lang'),)
+
+
+class Fan(Model):
+    OS_TYPE = (
+        ('I', 'ios'),
+        ('A', 'android')
+    )
+    fan_point = PointField()
+    device_token = CharField(max_length=255, unique=True)
+    device_os_type = CharField(max_length=1, choices=OS_TYPE)
+    objects = GeoManager()
