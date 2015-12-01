@@ -77,10 +77,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'epidemy.wsgi.application'
 
-CRONJOBS = [
-    ('* * * * *', 'epidemy_mock.views.send_push', '> /Users/rarslanova/last_scheduled_job.log')
-]
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
