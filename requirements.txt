@@ -2,8 +2,8 @@ Django
 djangorestframework
 gunicorn
 mysqlclient
-wheel
 django-push-notifications
 django-crontab
 psycopg2
 requests
+beautifulsoup4

@@ -35,7 +35,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'epidemy_mock',
+    'epidemy_api',
     'push_notifications',
     'django_crontab',
     'django.contrib.gis',
@@ -96,6 +96,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
 STATIC_URL = '/static/'
+
+CRONJOBS = [
+    ('0 14 * * *', 'backgraund_worker.send_push.send_push')
+]
 
 try:
     from .local_settings import *
