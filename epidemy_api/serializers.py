@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta, tzinfo
 from bs4 import BeautifulSoup
 from rest_framework.serializers import (
     HyperlinkedModelSerializer, SerializerMethodField, Serializer, CharField, ListField, ValidationError
@@ -47,6 +47,13 @@ def selection_videos(document):
 class ContentSerializer(HyperlinkedModelSerializer):
     pass
 
+class simple_utc(tzinfo):
+    def tzname(self):
+        return "UTC"
+
+    def utcoffset(self, dt):
+        return timedelta(0)
+
 
 class ConcertsSerializer(HyperlinkedModelSerializer):
     image_urls = SerializerMethodField()
@@ -69,7 +76,7 @@ class NewsSerializer(HyperlinkedModelSerializer):
 
     @staticmethod
     def get_date(obj):
-        return datetime(*(obj.date.timetuple()[:6]))
+        return datetime(*(obj.date.timetuple()[:6])).replace(tzinfo=simple_utc())
 
     @staticmethod
     def get_image_urls(obj):
