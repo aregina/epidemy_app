@@ -1,3 +1,4 @@
+from datetime import datetime
 from bs4 import BeautifulSoup
 from rest_framework.serializers import (
     HyperlinkedModelSerializer, SerializerMethodField, Serializer, CharField, ListField, ValidationError
@@ -20,7 +21,9 @@ def processing_text(document):
         videos.append(youtube_url)
 
     for img in soup.find_all("img"):
-        url = img.extract().get("src")
+        img_content = img.extract()
+        soup.contents += img_content.renderContents()
+        url = img_content.get("src")
         if url:
             if url.find("http://") == -1:
                 url = "http://epidemia.ru" + url
@@ -42,10 +45,31 @@ def selection_videos(document):
 
 
 class ContentSerializer(HyperlinkedModelSerializer):
+    pass
+
+
+class ConcertsSerializer(HyperlinkedModelSerializer):
+    image_urls = SerializerMethodField()
+
+    @staticmethod
+    def get_image_urls(obj):
+        return ["http://epidemia.ru/uploads/concerts/{}.big.jpg".format(obj.id)]
+
+    class Meta:
+        model = YupeConcerts
+        fields = ('date', 'title', 'place', 'short_text', 'full_text', 'image_urls')
+
+
+class NewsSerializer(HyperlinkedModelSerializer):
     image_urls = SerializerMethodField()
     video_urls = SerializerMethodField()
     full_text = SerializerMethodField()
     short_text = SerializerMethodField()
+    date = SerializerMethodField()
+
+    @staticmethod
+    def get_date(obj):
+        return datetime(*(obj.date.timetuple()[:6]))
 
     @staticmethod
     def get_image_urls(obj):
@@ -61,16 +85,8 @@ class ContentSerializer(HyperlinkedModelSerializer):
 
     @staticmethod
     def get_short_text(obj):
-        return delete_images_and_videos(obj.full_text)
+        return delete_images_and_videos(obj.short_text)
 
-
-class ConcertsSerializer(ContentSerializer):
-    class Meta:
-        model = YupeConcerts
-        fields = ('date', 'title', 'place', 'short_text', 'full_text', 'image_urls', 'video_urls')
-
-
-class NewsSerializer(ContentSerializer):
     class Meta:
         model = YupeNews
         fields = ('date', 'title', 'short_text', 'full_text', 'image_urls', 'video_urls')
