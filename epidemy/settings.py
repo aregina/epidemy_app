@@ -42,8 +42,19 @@ INSTALLED_APPS = (
 )
 
 REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAdminUser',),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAdminUser',
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.SessionAuthentication',
+        'epidemy_api.authentication.DefaultBasicAuthentication',
+    ),
     'PAGE_SIZE': 10
+}
+
+DEFAULT_AUTHENTICATION_CREDENTIAL = {
+    'login': '',
+    'password': '',
 }
 
 MIDDLEWARE_CLASSES = (
