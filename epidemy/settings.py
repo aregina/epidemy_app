@@ -42,8 +42,19 @@ INSTALLED_APPS = (
 )
 
 REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAdminUser',),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAdminUser',
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.SessionAuthentication',
+        'epidemy_api.authentication.DefaultBasicAuthentication',
+    ),
     'PAGE_SIZE': 10
+}
+
+DEFAULT_AUTHENTICATION_CREDENTIAL = {
+    'login': '',
+    'password': '',
 }
 
 MIDDLEWARE_CLASSES = (
@@ -98,7 +109,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 CRONJOBS = [
-    ('0 14 * * *', 'backgraund_worker.send_push.send_push')
+    ('0 14 * * *', 'background_worker.send_push.send_push')
 ]
 
 try:
