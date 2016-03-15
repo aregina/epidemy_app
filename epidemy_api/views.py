@@ -19,7 +19,7 @@ class ConcertsViewSet(ModelViewSet):
     pagination_class = LargeResultsSetPagination
 
     def get_queryset(self):
-        return YupeConcerts.objects.using('epidemy_legacy').filter(date__gte=date.today() - timedelta(days=1)).order_by('date')
+        return YupeConcerts.objects.using('epidemy_legacy').filter(date__gte=date.today() - timedelta(hours=10)).order_by('date')
 
 
 class NewsViewSet(ModelViewSet):
