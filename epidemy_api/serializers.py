@@ -86,6 +86,10 @@ class NewsSerializer(HyperlinkedModelSerializer):
     def get_short_text(cls, obj):
         return cls.delete_images_and_videos(obj.short_text)
 
+    @staticmethod
+    def get_date(obj):
+        return datetime(*(obj.date.timetuple()[:6])).replace(tzinfo=timezone.utc)
+
 
 class FanSerializer(Serializer):
     OS_TYPE = (

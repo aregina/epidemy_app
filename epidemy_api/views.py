@@ -4,13 +4,19 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.pagination import PageNumberPagination
 
 from .models import YupeConcerts, YupeNews, Fan
 from .serializers import ConcertsSerializer, NewsSerializer, FanSerializer
 
 
+class LargeResultsSetPagination(PageNumberPagination):
+    page_size = 1000
+
+
 class ConcertsViewSet(ModelViewSet):
     serializer_class = ConcertsSerializer
+    pagination_class = LargeResultsSetPagination
 
     def get_queryset(self):
         return YupeConcerts.objects.using('epidemy_legacy').filter(date__gte=date.today() - timedelta(days=1)).order_by('date')
