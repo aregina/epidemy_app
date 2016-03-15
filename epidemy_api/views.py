@@ -11,17 +11,19 @@ from .serializers import ConcertsSerializer, NewsSerializer, FanSerializer
 
 class ConcertsViewSet(ModelViewSet):
     serializer_class = ConcertsSerializer
-    queryset = YupeConcerts.objects.using('epidemy_legacy').filter(date__gte=date.today() - timedelta(days=1)).order_by('date')
+
+    def get_queryset(self):
+        return YupeConcerts.objects.using('epidemy_legacy').filter(date__gte=date.today() - timedelta(days=1)).order_by('date')
 
 
 class NewsViewSet(ModelViewSet):
-    queryset = YupeNews.objects.using('epidemy_legacy').order_by('-date')
     serializer_class = NewsSerializer
+    queryset = YupeNews.objects.using('epidemy_legacy').order_by('-date')
 
 
 class FanViewSet(ModelViewSet):
-    queryset = Fan.objects.all()
     serializer_class = FanSerializer
+    queryset = Fan.objects.all()
 
 
 @api_view(['POST'])

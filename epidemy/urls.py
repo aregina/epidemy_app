@@ -29,6 +29,6 @@ urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^rest-api/', include(router.urls)),
     url(r'^rest-api/auth/', include('rest_framework.urls', namespace='rest_framework')),
-    url(r'^fans/', views.create_fan)
+    url(r'^fans/', views.create_fan),
 ]
 

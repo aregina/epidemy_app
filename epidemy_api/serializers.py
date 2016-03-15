@@ -43,8 +43,7 @@ class NewsSerializer(HyperlinkedModelSerializer):
 
         for video in soup.find_all('iframe'):
             youtube_url = video.extract().get('src')
-            if youtube_url.startswith('//'):
-                youtube_url = youtube_url.replace('//', '')
+            youtube_url = youtube_url.lstrip('//')
             videos.append(youtube_url)
 
         for img in soup.find_all('img'):
@@ -87,10 +86,6 @@ class NewsSerializer(HyperlinkedModelSerializer):
     def get_short_text(cls, obj):
         return cls.delete_images_and_videos(obj.short_text)
 
-    @staticmethod
-    def get_date(obj):
-        return datetime(*(obj.date.timetuple()[:6])).replace(tzinfo=timezone.utc)
-
 
 class FanSerializer(Serializer):
     OS_TYPE = (
@@ -107,9 +102,7 @@ class FanSerializer(Serializer):
         return super(FanSerializer, self).validate(attrs)
 
     def create(self, validated_data):
-        log, lat = validated_data['fan_point']
-        points = 'POINT({} {})'.format(log, lat)
-        validated_data['fan_point'] = points
+        validated_data['fan_point'] = 'POINT({} {})'.format(*validated_data['fan_point'])
         return Fan.objects.create(**validated_data)
 
     class Meta:

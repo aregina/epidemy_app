@@ -3,4 +3,5 @@
 local_settings.py
 .DS_Store
 .idea
+Epidemia_certificate.pem
 /venv
