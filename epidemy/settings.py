@@ -35,15 +35,26 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'epidemy_mock',
+    'epidemy_api',
     'push_notifications',
     'django_crontab',
     'django.contrib.gis',
 )
 
 REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAdminUser',),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAdminUser',
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.SessionAuthentication',
+        'epidemy_api.authentication.DefaultBasicAuthentication',
+    ),
     'PAGE_SIZE': 10
+}
+
+DEFAULT_AUTHENTICATION_CREDENTIAL = {
+    'login': '',
+    'password': '',
 }
 
 MIDDLEWARE_CLASSES = (
@@ -97,8 +108,12 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+CRONJOBS = [
+    ('0 14 * * *', 'background_worker.send_push.send_push')
+]
+
 try:
-    from local_settings import *
+    from .local_settings import *
 except ImportError:
     pass
 
